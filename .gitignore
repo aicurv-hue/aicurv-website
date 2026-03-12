@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+.gemini/
+*.log
+_temp/
+tmp/
+.git/
+.system_generated/
+browser/
+recording/
+screenshots/
