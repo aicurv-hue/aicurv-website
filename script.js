@@ -5,6 +5,39 @@ document.addEventListener("DOMContentLoaded", () => {
     // Register GSAP ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
 
+    // ── PRELOADER ──────────────────────────────────────────
+    const preloader = document.getElementById('preloader');
+    const wordmark  = preloader.querySelector('.preloader-wordmark');
+    const barFill   = preloader.querySelector('.preloader-bar span');
+
+    document.body.classList.add('preloading');
+
+    const fireHero = () => {
+        gsap.timeline()
+            .to(".title-sans",    { y: 0, opacity: 1, duration: 1,   ease: "power4.out", delay: 0.15 })
+            .to(".title-serif",   { y: 0, opacity: 1, duration: 1,   ease: "power4.out" }, "-=0.6")
+            .to(".hero-subtitle", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4")
+            .to(".hero-ctas",     { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4");
+    };
+
+    const tlPreload = gsap.timeline({
+        paused: true,
+        onComplete: () => {
+            document.body.classList.remove('preloading');
+            fireHero();
+        }
+    });
+
+    tlPreload
+        .to(wordmark, { opacity: 1, duration: 0.4, ease: "power2.out" })
+        .to(barFill,  { width: '100%', duration: 0.6, ease: "power1.inOut" }, "-=0.1")
+        .to(wordmark, { opacity: 0, duration: 0.3, ease: "power2.in" }, "+=0.15")
+        .to(preloader,{ opacity: 0, duration: 0.35, ease: "power2.in" }, "-=0.1")
+        .set(preloader,{ display: 'none' });
+
+    document.fonts.ready.then(() => tlPreload.play());
+    // ── END PRELOADER ──────────────────────────────────────
+
     let ctx = gsap.context(() => {
         // Navbar morph logic
         ScrollTrigger.create({
@@ -13,12 +46,17 @@ document.addEventListener("DOMContentLoaded", () => {
             toggleClass: { className: 'scrolled', targets: '.navbar' }
         });
 
-        // Hero initial stagger reveal
-        const tlHero = gsap.timeline();
-        tlHero.to(".title-sans", { y: 0, opacity: 1, duration: 1, ease: "power4.out", delay: 0.2 })
-            .to(".title-serif", { y: 0, opacity: 1, duration: 1, ease: "power4.out" }, "-=0.6")
-            .to(".hero-subtitle", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4")
-            .to(".hero-ctas", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4");
+        // Hero Parallax
+        gsap.to(".hero-bg img", {
+            scrollTrigger: {
+                trigger: ".hero",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            },
+            y: "30%",
+            ease: "none"
+        });
 
         // Philosophy Parallax bg
         gsap.to(".philosophy-img", {
@@ -42,6 +80,106 @@ document.addEventListener("DOMContentLoaded", () => {
             opacity: 0,
             duration: 1,
             stagger: 0.2,
+            ease: "power3.out"
+        });
+
+        // Stats bar reveal + counter animation
+        gsap.from(".stats-bar", {
+            scrollTrigger: { trigger: ".stats-bar", start: "top 80%" },
+            opacity: 0,
+            y: 30,
+            duration: 0.8,
+            ease: "power3.out"
+        });
+
+        document.querySelectorAll(".stat-number").forEach(el => {
+            const target = parseInt(el.dataset.target, 10);
+            ScrollTrigger.create({
+                trigger: el,
+                start: "top 85%",
+                once: true,
+                onEnter: () => {
+                    gsap.to({ val: 0 }, {
+                        val: target,
+                        duration: 1.8,
+                        ease: "power2.out",
+                        onUpdate: function () {
+                            el.textContent = Math.round(this.targets()[0].val);
+                        }
+                    });
+                }
+            });
+        });
+
+        // Features intro reveal
+        gsap.from(".features-intro", {
+            scrollTrigger: {
+                trigger: ".features",
+                start: "top 75%",
+            },
+            y: 30,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power3.out"
+        });
+
+        // FAQ reveal
+        gsap.from(".faq-header", {
+            scrollTrigger: { trigger: ".faq", start: "top 75%" },
+            y: 30, opacity: 0, duration: 0.8, ease: "power3.out"
+        });
+        gsap.from(".faq-item", {
+            scrollTrigger: { trigger: ".faq-list", start: "top 80%" },
+            y: 20, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power3.out"
+        });
+
+        // Contact section reveal
+        gsap.from(".contact-text", {
+            scrollTrigger: { trigger: ".contact", start: "top 70%" },
+            x: -40, opacity: 0, duration: 0.9, ease: "power3.out"
+        });
+        gsap.from(".contact-form", {
+            scrollTrigger: { trigger: ".contact", start: "top 70%" },
+            x: 40, opacity: 0, duration: 0.9, ease: "power3.out"
+        });
+
+        // How It Works reveal
+        gsap.from(".hiw-header", {
+            scrollTrigger: { trigger: ".how-it-works", start: "top 70%" },
+            y: 30, opacity: 0, duration: 0.8, ease: "power3.out"
+        });
+
+        gsap.from(".hiw-step", {
+            scrollTrigger: { trigger: ".hiw-steps", start: "top 75%" },
+            y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power3.out",
+            onComplete() {
+                document.querySelectorAll('.hiw-step').forEach(s => s.classList.add('animated'));
+            }
+        });
+
+        // Feature cards scroll reveal
+        gsap.from(".feature-card", {
+            scrollTrigger: {
+                trigger: ".features",
+                start: "top 70%",
+            },
+            y: 50,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power3.out"
+        });
+
+        // Pricing cards scroll reveal
+        gsap.from(".price-card", {
+            scrollTrigger: {
+                trigger: ".membership",
+                start: "top 70%",
+            },
+            y: 50,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.15,
             ease: "power3.out"
         });
 
@@ -90,11 +228,175 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         updateShuffler();
 
-        setInterval(() => {
+        const shufflerInterval = setInterval(() => {
             let last = order.pop();
             order.unshift(last);
             updateShuffler();
         }, 3000); // cycle every 3s
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) clearInterval(shufflerInterval);
+        });
+    }
+
+    // Scroll Progress Bar
+    const scrollBar = document.getElementById('scroll-progress');
+    if (scrollBar) {
+        window.addEventListener('scroll', () => {
+            const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            scrollBar.style.width = pct + '%';
+        }, { passive: true });
+    }
+
+    // Magnetic Buttons
+    function initMagneticButtons() {
+        const STRENGTH = 0.38;
+        document.querySelectorAll('.btn-clay, .btn-nav').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.style.transition = 'transform 0.1s ease, box-shadow 0.3s ease';
+            });
+
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const dx = (e.clientX - (rect.left + rect.width / 2)) * STRENGTH;
+                const dy = (e.clientY - (rect.top + rect.height / 2)) * STRENGTH;
+                btn.style.transform = `translate(${dx}px, ${dy}px)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease';
+                btn.style.transform = 'translate(0px, 0px)';
+                btn.addEventListener('transitionend', () => { btn.style.transition = ''; }, { once: true });
+            });
+        });
+    }
+
+    // Card Hover Tilt
+    function initCardTilt() {
+        const MAX_TILT    = 10;
+        const PERSPECTIVE = 900;
+        const LIFT        = 10;
+
+        document.querySelectorAll('.feature-card, .price-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const nx = ((e.clientX - rect.left) / rect.width  - 0.5) * 2;
+                const ny = ((e.clientY - rect.top)  / rect.height - 0.5) * 2;
+                card.style.transition = 'transform 0.1s ease, box-shadow 0.4s ease';
+                card.style.transform = `perspective(${PERSPECTIVE}px) rotateX(${-ny * MAX_TILT}deg) rotateY(${nx * MAX_TILT}deg) translateZ(${LIFT}px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease';
+                card.style.transform  = `perspective(${PERSPECTIVE}px) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+            });
+        });
+    }
+
+    if (window.matchMedia('(hover: hover)').matches) {
+        initMagneticButtons();
+        initCardTilt();
+    }
+
+    // FAQ Accordion
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const btn = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+
+        btn.addEventListener('click', () => {
+            const isOpen = item.classList.contains('open');
+
+            // Close all
+            faqItems.forEach(i => {
+                i.classList.remove('open');
+                i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+                i.querySelector('.faq-answer').style.maxHeight = null;
+            });
+
+            // Open clicked if it was closed
+            if (!isOpen) {
+                item.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+            }
+        });
+    });
+
+    // Contact Form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        const formSuccess = document.getElementById('formSuccess');
+
+        const validate = () => {
+            let valid = true;
+            const fields = [
+                { id: 'fname', msg: 'Name is required.' },
+                { id: 'femail', msg: 'A valid email is required.', email: true },
+                { id: 'fgoal', msg: 'Please describe what you want to build.' }
+            ];
+            fields.forEach(({ id, msg, email }) => {
+                const el = document.getElementById(id);
+                const errEl = el.closest('.form-field').querySelector('.field-error');
+                const val = el.value.trim();
+                const isInvalid = !val || (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val));
+                el.classList.toggle('error', isInvalid);
+                errEl.textContent = isInvalid ? msg : '';
+                if (isInvalid) valid = false;
+            });
+            return valid;
+        };
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!validate()) return;
+            // Simulate send (replace with real endpoint later)
+            const btn = contactForm.querySelector('.form-submit');
+            btn.disabled = true;
+            btn.querySelector('.submit-label').textContent = 'Sending…';
+            setTimeout(() => {
+                contactForm.reset();
+                btn.disabled = false;
+                btn.querySelector('.submit-label').textContent = 'Send Message';
+                formSuccess.classList.add('visible');
+                setTimeout(() => formSuccess.classList.remove('visible'), 5000);
+            }, 1200);
+        });
+
+        // Clear errors on input
+        contactForm.querySelectorAll('input, textarea').forEach(el => {
+            el.addEventListener('input', () => {
+                el.classList.remove('error');
+                el.closest('.form-field').querySelector('.field-error').textContent = '';
+            });
+        });
+    }
+
+    // 0. Mobile Hamburger Menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileLinks = document.querySelectorAll('.mobile-link, .mobile-cta');
+
+    if (hamburger && mobileMenu) {
+        const toggleMenu = (open) => {
+            hamburger.classList.toggle('open', open);
+            mobileMenu.classList.toggle('open', open);
+            hamburger.setAttribute('aria-expanded', String(open));
+            document.body.style.overflow = open ? 'hidden' : '';
+        };
+
+        hamburger.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.contains('open');
+            toggleMenu(!isOpen);
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => toggleMenu(false));
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') toggleMenu(false);
+        });
     }
 
     // 2. AI Execution Stream Telemetry Typewriter
@@ -169,7 +471,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Fade out cursor
                 .to(cursor, { opacity: 0, duration: 0.5, delay: 0.6 })
                 // Reset
-                .set(targetDay, { className: 'day active-target' })
+                .call(() => {
+                    targetDay.classList.remove('active');
+                    targetDay.className = 'day active-target';
+                })
                 .set(cursor, { opacity: 1, x: 250, y: 300 });
         });
     }
