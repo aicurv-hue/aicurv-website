@@ -610,6 +610,14 @@ body.preloading {
     margin-top: 1rem;
 }
 
+.hiw-subtitle {
+    font-size: 1rem;
+    color: rgba(242, 240, 233, 0.5);
+    margin-top: 1.25rem;
+    max-width: 480px;
+    line-height: 1.6;
+}
+
 .hiw-accent {
     font-family: var(--font-serif);
     font-style: italic;
@@ -922,11 +930,32 @@ body.preloading {
 
 .membership-title {
     text-align: center;
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: 4rem;
-    margin-bottom: 4rem;
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
     color: var(--moss);
+}
+
+.membership-subtitle {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: rgba(26, 26, 26, 0.5);
+    letter-spacing: 0.04em;
+    margin-bottom: 4rem;
+}
+
+.plan-tagline {
+    font-size: 0.85rem;
+    color: rgba(26, 26, 26, 0.5);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.featured-price .plan-tagline {
+    color: rgba(242, 240, 233, 0.55);
 }
 
 .pricing-grid {
