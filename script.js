@@ -5,13 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Register GSAP ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
 
-    // ── HERO INTRO ─────────────────────────────────────────
-    gsap.timeline()
-        .to(".title-sans",    { y: 0, opacity: 1, duration: 1,   ease: "power4.out", delay: 0.1 })
-        .to(".title-serif",   { y: 0, opacity: 1, duration: 1,   ease: "power4.out" }, "-=0.6")
-        .to(".hero-subtitle", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4")
-        .to(".hero-ctas",     { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4");
-    // ── END HERO INTRO ─────────────────────────────────────
 
     let ctx = gsap.context(() => {
         // Navbar morph logic
