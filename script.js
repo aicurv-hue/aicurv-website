@@ -5,38 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Register GSAP ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
 
-    // ── PRELOADER ──────────────────────────────────────────
-    const preloader = document.getElementById('preloader');
-    const wordmark  = preloader.querySelector('.preloader-wordmark');
-    const barFill   = preloader.querySelector('.preloader-bar span');
-
-    document.body.classList.add('preloading');
-
-    const fireHero = () => {
-        gsap.timeline()
-            .to(".title-sans",    { y: 0, opacity: 1, duration: 1,   ease: "power4.out", delay: 0.15 })
-            .to(".title-serif",   { y: 0, opacity: 1, duration: 1,   ease: "power4.out" }, "-=0.6")
-            .to(".hero-subtitle", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4")
-            .to(".hero-ctas",     { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4");
-    };
-
-    const tlPreload = gsap.timeline({
-        paused: true,
-        onComplete: () => {
-            document.body.classList.remove('preloading');
-            fireHero();
-        }
-    });
-
-    tlPreload
-        .to(wordmark, { opacity: 1, duration: 0.4, ease: "power2.out" })
-        .to(barFill,  { width: '100%', duration: 0.6, ease: "power1.inOut" }, "-=0.1")
-        .to(wordmark, { opacity: 0, duration: 0.3, ease: "power2.in" }, "+=0.15")
-        .to(preloader,{ opacity: 0, duration: 0.35, ease: "power2.in" }, "-=0.1")
-        .set(preloader,{ display: 'none' });
-
-    document.fonts.ready.then(() => tlPreload.play());
-    // ── END PRELOADER ──────────────────────────────────────
+    // ── HERO INTRO ─────────────────────────────────────────
+    gsap.timeline()
+        .to(".title-sans",    { y: 0, opacity: 1, duration: 1,   ease: "power4.out", delay: 0.1 })
+        .to(".title-serif",   { y: 0, opacity: 1, duration: 1,   ease: "power4.out" }, "-=0.6")
+        .to(".hero-subtitle", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4")
+        .to(".hero-ctas",     { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4");
+    // ── END HERO INTRO ─────────────────────────────────────
 
     let ctx = gsap.context(() => {
         // Navbar morph logic
@@ -243,8 +218,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const scrollBar = document.getElementById('scroll-progress');
     if (scrollBar) {
         window.addEventListener('scroll', () => {
-            const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-            scrollBar.style.width = pct + '%';
+            const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            scrollBar.style.transform = `scaleX(${pct})`;
         }, { passive: true });
     }
 
@@ -445,14 +420,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (cursor && targetDay && saveBtn) {
         gsap.context(() => {
+            // Cache layout reads once to avoid forced reflow on every animation repeat
+            const dayX = targetDay.offsetLeft + targetDay.offsetWidth / 2;
+            const dayY = targetDay.offsetTop + targetDay.offsetHeight / 2;
+            const btnX = saveBtn.offsetLeft + saveBtn.offsetWidth / 2;
+            const btnY = saveBtn.offsetTop + saveBtn.offsetHeight / 2;
+
             const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
 
             // start position artificially outside card
             tl.set(cursor, { x: 250, y: 300 })
                 // Move cursor into target day
                 .to(cursor, {
-                    x: () => targetDay.offsetLeft + targetDay.offsetWidth / 2,
-                    y: () => targetDay.offsetTop + targetDay.offsetHeight / 2,
+                    x: dayX,
+                    y: dayY,
                     duration: 1.5, ease: "power2.inOut"
                 })
                 // Click push down
@@ -461,8 +442,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 .to(cursor, { scale: 1, duration: 0.1, onComplete: () => targetDay.classList.add('active') })
                 // Move cursor to Save button
                 .to(cursor, {
-                    x: () => saveBtn.offsetLeft + saveBtn.offsetWidth / 2,
-                    y: () => saveBtn.offsetTop + saveBtn.offsetHeight / 2,
+                    x: btnX,
+                    y: btnY,
                     duration: 1.2, ease: "power2.inOut", delay: 0.4
                 })
                 // Click Save button

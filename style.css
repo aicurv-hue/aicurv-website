@@ -26,54 +26,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ======================== */
-/* PRELOADER                */
-/* ======================== */
-#preloader {
-    position: fixed;
-    inset: 0;
-    background: var(--charcoal);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-}
-
-.preloader-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-}
-
-.preloader-wordmark {
-    font-family: var(--font-heading);
-    font-weight: 800;
-    font-size: clamp(2rem, 6vw, 4.5rem);
-    letter-spacing: 0.2em;
-    color: var(--cream);
-    opacity: 0;
-}
-
-.preloader-bar {
-    width: 120px;
-    height: 2px;
-    background: rgba(242, 240, 233, 0.1);
-    border-radius: 2px;
-    overflow: hidden;
-}
-
-.preloader-bar span {
-    display: block;
-    height: 100%;
-    width: 0%;
-    background: var(--clay);
-    border-radius: 2px;
-}
-
-body.preloading {
-    overflow: hidden;
-}
 
 /* ======================== */
 /* SCROLL PROGRESS          */
@@ -83,10 +35,13 @@ body.preloading {
     top: 0;
     left: 0;
     height: 3px;
-    width: 0%;
+    width: 100%;
     background: var(--clay);
     z-index: 10001;
     pointer-events: none;
+    transform: scaleX(0);
+    transform-origin: left;
+    will-change: transform;
 }
 
 /* Global Noise overlay */
