@@ -44,16 +44,15 @@ body {
     will-change: transform;
 }
 
-/* Global Noise overlay */
+/* Global Noise overlay — static tile replaces feTurbulence SVG filter */
 .noise-svg {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    inset: 0;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.05;
+    opacity: 0.06;
+    background: url('assets/noise-tile.png') repeat;
+    background-size: 200px 200px;
 }
 
 .container {
