@@ -35,7 +35,43 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/lucide@0.441.0/dist/umd/lucide.min.js"></script>
     <script defer src="script.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <!-- Critical above-fold CSS inlined (Slice 5) -->
+    <style>
+        :root{--moss:#2E4036;--moss-tint:#41584B;--clay:#CC5833;--cream:#F2F0E9;--muted:#E8E6DF;--charcoal:#1A1A1A;--font-heading:'Plus Jakarta Sans',sans-serif;--font-sans:'Outfit',sans-serif;--font-serif:'Cormorant Garamond',serif;--font-mono:'JetBrains Mono',monospace}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background-color:var(--cream);color:var(--charcoal);font-family:var(--font-sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+        #scroll-progress{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--clay);z-index:10001;pointer-events:none;transform:scaleX(0);transform-origin:left;will-change:transform}
+        .noise-svg{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;opacity:.05}
+        .container{max-width:1200px;margin:0 auto;padding:0 2rem}
+        .navbar{position:fixed;top:2rem;left:50%;transform:translateX(-50%);width:calc(100% - 4rem);max-width:900px;padding:1rem 2rem;border-radius:3rem;z-index:100;transition:all .4s cubic-bezier(.4,0,.2,1);background:transparent;color:#fff}
+        .navbar.scrolled{background:rgba(242,240,233,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(46,64,54,.1);color:var(--moss);box-shadow:0 10px 30px rgba(0,0,0,.05)}
+        .nav-content{display:flex;justify-content:space-between;align-items:center}
+        .nav-brand{font-family:var(--font-heading);font-weight:800;letter-spacing:.05em;font-size:1.25rem}
+        .nav-links{display:flex;gap:1.5rem;list-style:none;font-weight:500;font-size:.9rem}
+        .nav-links a{color:inherit;text-decoration:none;transition:opacity .3s}
+        .btn-nav{background:#fff;color:var(--charcoal);padding:.6rem 1.5rem;border-radius:2rem;text-decoration:none;font-weight:600;font-size:.85rem;transition:transform .3s ease,box-shadow .3s ease;white-space:nowrap}
+        .navbar.scrolled .btn-nav{background:var(--moss);color:var(--cream)}
+        .hero{position:relative;height:100dvh;display:flex;align-items:flex-end;padding-bottom:5rem;padding-left:5rem;color:var(--cream)}
+        .hero-bg,.philosophy-bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden}
+        .hero-bg img{width:100%;height:120%;object-fit:cover;object-position:center top}
+        .hero-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,rgba(46,64,54,.7) 0%,rgba(26,26,26,.9) 100%)}
+        .hero-content{max-width:800px;z-index:10}
+        .hero-title{display:flex;flex-direction:column;line-height:1.1;margin-bottom:1.5rem}
+        .title-sans{font-family:var(--font-heading);font-size:clamp(3rem,6vw,5rem);font-weight:700;letter-spacing:-.02em;animation:heroSlideUp .9s cubic-bezier(.16,1,.3,1) .05s both}
+        .title-serif{font-family:var(--font-serif);font-style:italic;font-size:clamp(4.5rem,9vw,8rem);font-weight:600;color:var(--clay);animation:heroSlideUp .9s cubic-bezier(.16,1,.3,1) .2s both}
+        .hero-subtitle{font-size:clamp(1rem,1.5vw,1.25rem);line-height:1.6;max-width:550px;color:rgba(242,240,233,.8);margin-bottom:2rem;animation:heroFadeUp .8s cubic-bezier(.16,1,.3,1) .4s both}
+        .hero-ctas{display:flex;gap:1rem;animation:heroFadeUp .8s cubic-bezier(.16,1,.3,1) .55s both}
+        @keyframes heroSlideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes heroFadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .hero-btn{font-size:1rem;padding:1rem 2.5rem}
+        .btn{padding:1rem 2rem;border-radius:2rem;font-weight:600;cursor:pointer;border:none;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease;font-family:var(--font-sans);font-size:1rem;text-decoration:none;display:inline-block;text-align:center}
+        .btn-clay{background:var(--clay);color:#fff}
+        .btn-ghost{background:transparent;border:1px solid rgba(242,240,233,.4);color:var(--cream)}
+        @media(max-width:768px){.hero{padding-left:1.5rem;padding-bottom:3rem}.nav-links{display:none}}
+    </style>
+    <!-- Full CSS async (Slice 5) -->
+    <link rel="preload" as="style" href="style.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="style.css"></noscript>
 </head>
 
 <body>
