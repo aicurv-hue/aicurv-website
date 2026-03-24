@@ -69,9 +69,9 @@
         .btn-ghost{background:transparent;border:1px solid rgba(242,240,233,.4);color:var(--cream)}
         @media(max-width:768px){.hero{padding-left:1.5rem;padding-bottom:3rem}.nav-links{display:none}}
     </style>
-    <!-- Full CSS async (Slice 5) -->
-    <link rel="preload" as="style" href="style.css" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="style.css"></noscript>
+    <!-- Preload hint so browser fetches early, but still blocks to prevent FOUC -->
+    <link rel="preload" as="style" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
