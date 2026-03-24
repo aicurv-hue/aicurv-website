@@ -25,6 +25,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Preload LCP image (Slice 1) -->
+    <link rel="preload" as="image" href="assets/hero-space.webp" type="image/webp">
     <!-- Non-blocking font load (Slice 3) -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600;1,700&family=Outfit:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600;1,700&family=Outfit:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
@@ -75,7 +77,10 @@
 
     <section class="hero" id="hero">
         <div class="hero-bg">
-            <img src="assets/hero-space.png" alt="Cinematic deep space with speed light trails">
+            <picture>
+                <source srcset="assets/hero-space.webp" type="image/webp">
+                <img src="assets/hero-space.png" alt="Cinematic deep space with speed light trails" width="1920" height="1080" fetchpriority="high">
+            </picture>
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content">
@@ -217,7 +222,10 @@
 
     <section class="philosophy" id="philosophy">
         <div class="philosophy-bg">
-            <img src="assets/philosophy-space.png" alt="Organic cosmic texture" class="philosophy-img" loading="lazy">
+            <picture>
+                <source srcset="assets/philosophy-space.webp" type="image/webp">
+                <img src="assets/philosophy-space.png" alt="Organic cosmic texture" class="philosophy-img" loading="lazy" width="800" height="900">
+            </picture>
             <div class="philosophy-overlay"></div>
         </div>
         <div class="container philosophy-content">
